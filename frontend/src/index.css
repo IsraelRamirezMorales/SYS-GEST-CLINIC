@@ -5,14 +5,14 @@
   line-height: 1.5;
   font-weight: 400;
   
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --bg: #f4f6f9;
+  --primary: #28917a;
+  --primary-hover: #1e6f5c;
+  --bg: #f0f6f4;
   --bg-card: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --text: #000000;
-  --text-muted: #555555;
-  --shadow: rgba(0, 0, 0, 0.05);
+  --border: rgba(40, 145, 122, 0.15);
+  --text: #0f2e27;
+  --text-muted: #4e6a63;
+  --shadow: rgba(40, 145, 122, 0.05);
   
   background-color: var(--bg);
   color: var(--text);
@@ -25,8 +25,8 @@
 }
 
 body {
-  background-color: #f4f6f9;
-  color: #000000;
+  background-color: var(--bg);
+  color: var(--text);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

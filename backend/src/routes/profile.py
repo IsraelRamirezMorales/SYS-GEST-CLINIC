@@ -47,7 +47,7 @@ async def upload_picture(id_employees: int = Form(...), file: UploadFile = File(
         old_url = get_profile_picture_url(id_employees)
             
         # Upload image to Cloudinary
-        result = cloudinary.uploader.upload(file.file, folder="clinica_remes_profiles")
+        result = cloudinary.uploader.upload(file.file, folder="sys_gest_clinic_profiles")
         url = result.get("secure_url")
         
         if not url:

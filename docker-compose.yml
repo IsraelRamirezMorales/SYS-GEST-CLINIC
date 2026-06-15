@@ -3,16 +3,16 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: clinica_db
+    container_name: sysgest_db
     restart: always
     environment:
       POSTGRES_USER: clinica_user
       POSTGRES_PASSWORD: clinica_password
-      POSTGRES_DB: clinica_remes
+      POSTGRES_DB: sysgest_db_demo
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - sysgest_pgdata:/var/lib/postgresql/data
       # Mount initialization SQL scripts in the correct order
       - ./database/sql/002_create_enums.sql:/docker-entrypoint-initdb.d/001_create_enums.sql
       - ./database/sql/001_create_tables.sql:/docker-entrypoint-initdb.d/002_create_tables.sql
@@ -21,16 +21,14 @@ services:
 
   backend:
     build: ./backend
-    container_name: clinica_backend
+    container_name: sysgest_backend
     restart: always
     ports:
-      - "8000:8000"
-    # Para conectar a tu base de datos de producción Neon directamente, descomenta 'env_file'
-    # y comenta la sección 'environment'.
+      - "8001:8000"
+    # To connect to the local DB directly, we use env_file.
+    # We map host ports differently to prevent conflicts.
     env_file:
       - ./backend/.env
-    # environment:
-    #   - DATABASE_URL=postgresql://clinica_user:clinica_password@db:5432/clinica_remes
     volumes:
       - ./backend:/app
     depends_on:
@@ -38,12 +36,12 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: clinica_frontend
+    container_name: sysgest_frontend
     restart: always
     ports:
-      - "5173:5173"
+      - "5174:5173"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://localhost:8001
     depends_on:
       - backend
     volumes:
@@ -52,12 +50,12 @@ services:
 
   landing:
     image: nginx:alpine
-    container_name: clinica_landing
+    container_name: sysgest_landing
     restart: always
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./landing_page:/usr/share/nginx/html:ro
 
 volumes:
-  pgdata:
+  sysgest_pgdata:

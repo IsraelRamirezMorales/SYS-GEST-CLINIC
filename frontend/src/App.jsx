@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, Eye, EyeOff, Camera, CheckCircle2, AlertCircle, Info, Image, Trash2, X } from 'lucide-react';
+import { Search, Eye, EyeOff, Camera, CheckCircle2, AlertCircle, Info, Image, Trash2, X, User, Key } from 'lucide-react';
 import './App.css';
 
 const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : 'https://cl-nica-remes.onrender.com');
@@ -7,17 +7,17 @@ const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://l
 const getSessionDisplayText = (sesion_type, doctor_charge) => {
   const docId = parseInt(doctor_charge);
   if (sesion_type === 'Consulta') {
-    if (docId === 5) return 'Consulta - Dra. Carmen';
-    if (docId === 8) return 'Consulta - Dra. Ana Fer';
+    if (docId === 5) return 'Consulta - Dra. Gabriela';
+    if (docId === 8) return 'Consulta - Dra. Valeria';
     return 'Consulta';
   }
   if (sesion_type === 'Terapia') {
-    if (docId === 5) return 'Terapia - Fis. Hugo';
-    if (docId === 8) return 'Terapia - Fis. Monica';
+    if (docId === 5) return 'Terapia - Fis. Alejandro';
+    if (docId === 8) return 'Terapia - Fis. Patricia';
     return 'Terapia';
   }
   if (sesion_type === 'Alberca') {
-    return 'Alberca - Fis. Cristian';
+    return 'Alberca - Fis. Eduardo';
   }
   return sesion_type;
 };
@@ -489,7 +489,8 @@ function App() {
             username: data.username,
             name: data.name,
             last_name: data.last_name,
-            role: data.role
+            role: data.role,
+            profile_picture: data.profile_picture
           };
           setUser(loggedInUser);
           localStorage.setItem('clinica_user', JSON.stringify(loggedInUser));
@@ -989,45 +990,61 @@ function App() {
     return (
       <div className="app-container">
         <div className="login-wrapper fade-in">
-          <img src="/assets/images/remes_logo.png" alt="Logo" className="login-logo" />
-          <h1 className="login-title">sign-in</h1>
-          <p style={{ fontSize: '13px', color: '#555555', marginBottom: '25px' }}>Sistema de Control y Gestión Clínica</p>
-
-          {authError && <p className="login-error">{authError}</p>}
-
-          <form onSubmit={handleLogin} className="login-form">
-            <label className="login-label">User</label>
-            <input 
-              type="text" 
-              className="login-input" 
-              value={usernameInput}
-              onChange={(e) => setUsernameInput(e.target.value)}
-              required 
-            />
-
-            <label className="login-label">password</label>
-            <div className="login-password-container">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                className="login-input" 
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                required 
-              />
-              <button 
-                type="button" 
-                className="login-password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-              </button>
+          <div className="login-card">
+            <div className="login-illustration-container">
+              <img src="/assets/images/login_illustration.png" alt="Rehabilitación" className="login-illustration" />
+              <img src="/assets/images/logoSysGesCli.jpg" alt="Logo" className="login-illustration-logo" />
             </div>
+            
+            <div className="login-content">
+              <h1 className="login-title">¡Bienvenido!</h1>
+              <p className="login-subtitle">Sistema de Control y Gestión Clínica</p>
 
-            <button type="submit" className="login-btn" disabled={authLoading}>
-              {authLoading ? <div className="spinner"></div> : 'Entrar'}
-            </button>
-          </form>
+              {authError && <div className="login-error-card">{authError}</div>}
+
+              <form onSubmit={handleLogin} className="login-form">
+                <label className="login-label">Usuario</label>
+                <div className="login-input-wrapper">
+                  <User size={18} className="login-input-icon" />
+                  <input 
+                    type="text" 
+                    placeholder="Introduce tu usuario"
+                    className="login-input" 
+                    value={usernameInput}
+                    onChange={(e) => setUsernameInput(e.target.value)}
+                    required 
+                  />
+                </div>
+
+                <label className="login-label">Contraseña</label>
+                <div className="login-input-wrapper">
+                  <Key size={18} className="login-input-icon" />
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    placeholder="Introduce tu contraseña"
+                    className="login-input" 
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    required 
+                  />
+                  <button 
+                    type="button" 
+                    className="login-password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
+                </div>
+
+                <div className="forgot-password-link">¿Olvidaste tu contraseña?</div>
+
+                <button type="submit" className="login-btn" disabled={authLoading}>
+                  {authLoading ? <div className="spinner"></div> : 'Entrar'}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -1385,8 +1402,8 @@ function App() {
                   required
                 >
                   <option value="">-- Selecciona Encargada --</option>
-                  <option value="Carmen">Dra. Carmen</option>
-                  <option value="Ana">Dra. Ana Fer</option>
+                  <option value="Gabriela">Dra. Gabriela</option>
+                  <option value="Valeria">Dra. Valeria</option>
                 </select>
               </>
             )}
