@@ -23,14 +23,3 @@ services:
       - path: /*
         name: Cache-Control
         value: public, max-age=0, must-revalidate
-
-  # Landing Page Static Site (HTML + CSS + JS Puro)
-  - type: web
-    name: clinica-remes-landing
-    env: static
-    rootDir: landing_page
-    publishDir: .
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=0, must-revalidate

@@ -81,7 +81,6 @@ Al encenderse por primera vez, el contenedor de base de datos ejecuta automátic
 
 ### Enlaces de Acceso Local
 *   **Aplicación de Fisioterapia (Frontend):** [http://localhost:5174](http://localhost:5174)
-*   **Sitio Web Informativo (Landing Page):** [http://localhost:8081](http://localhost:8081)
 *   **Swagger de la API (Backend docs):** [http://localhost:8001/docs](http://localhost:8001/docs)
 
 ### 👥 Cuentas de Acceso Demo (Contraseña común: `password`)

@@ -48,14 +48,5 @@ services:
       - ./frontend:/app
       - /app/node_modules
 
-  landing:
-    image: nginx:alpine
-    container_name: sysgest_landing
-    restart: always
-    ports:
-      - "8081:80"
-    volumes:
-      - ./landing_page:/usr/share/nginx/html:ro
-
 volumes:
   sysgest_pgdata:
