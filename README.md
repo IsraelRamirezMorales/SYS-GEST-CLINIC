@@ -1,10 +1,10 @@
-# 🩺 SYS-GEST-CLINIC: Sistema de Gestión y Control de Citas Clínicas
+#  SYS-GEST-CLINIC: Sistema de Gestión y Control de Citas Clínicas
 
 **SYS-GEST-CLINIC** es una solución digital integral y premium diseñada para optimizar y automatizar el control de agendas, expedientes de pacientes y reportes operativos en clínicas de fisioterapia y rehabilitación física.
 
 ---
 
-## 🎯 Propósito del Proyecto
+##  Propósito del Proyecto
 
 Este proyecto nació con el objetivo de apoyar a **micro, pequeñas y medianas empresas (MiPyMEs)** del sector salud a dar el salto hacia la transformación digital. Muchas clínicas operan con registros manuales en papel u hojas de cálculo propensas a errores. **SYS-GEST-CLINIC** proporciona una plataforma centralizada y accesible que:
 *   Previene la duplicidad y el empalme de citas.
@@ -14,11 +14,11 @@ Este proyecto nació con el objetivo de apoyar a **micro, pequeñas y medianas e
 
 ---
 
-## 📸 Galería y Recorrido Visual de la Aplicación
+##  Galería y Recorrido Visual de la Aplicación
 
 A continuación se detallan las interfaces clave del sistema utilizando capturas reales de la aplicación:
 
-### 🔑 1. Pantalla de Inicio de Sesión (Login)
+###  1. Pantalla de Inicio de Sesión (Login)
 Una pantalla de acceso segura diseñada bajo directrices de minimalismo utilitario oscuro. Cuenta con una ilustración 3D de fisioterapia personalizada y campos con prefijos de iconos interactivos para guiar al usuario.
 ![Pantalla de Login](img/LOGIN.png)
 
@@ -26,17 +26,17 @@ Una pantalla de acceso segura diseñada bajo directrices de minimalismo utilitar
 El menú de inicio móvil (Mobile First) permite al personal de salud acceder rápidamente a todas las herramientas del sistema: consultar calendarios, ver citas asignadas, agregar nuevos pacientes o analizar el historial.
 ![Dashboard Principal](img/HOME%20PAGE.png)
 
-### 📅 3. Calendario Clínico Interactivo
+###  3. Calendario Clínico Interactivo
 Un calendario mensual dinámico que resalta los días con citas programadas y permite a los especialistas ver el detalle horario de cada consulta, sesión terapéutica o rehabilitación en alberca, con badges de colores asociados.
 ![Calendario Mensual](img/CALENDARIO.png)
 
-### 📊 4. Estadísticas y Reportes Operativos
+###  4. Estadísticas y Reportes Operativos
 Un panel inteligente de Business Intelligence (BI) que procesa las asistencias y los tipos de sesión en tiempo real para generar métricas semanales, mensuales y anuales de la clínica, distribuidas por terapeuta.
 ![Estadísticas Clínicas](img/REGISTROS.png)
 
 ---
 
-## 🚀 Módulos y Funcionalidades Detalladas
+##  Módulos y Funcionalidades Detalladas
 
 1.  **Autenticación y Perfiles Personalizados:**
     *   Acceso con roles diferenciados para Médicos Directores y Fisioterapeutas.
@@ -56,7 +56,7 @@ Un panel inteligente de Business Intelligence (BI) que procesa las asistencias y
 
 ---
 
-## 🛠️ Tecnologías y Arquitectura
+##  Tecnologías y Arquitectura
 
 *   **Backend:** Python 3.12, FastAPI, Uvicorn, PostgreSQL (psycopg2-binary), Passlib, Bcrypt.
 *   **Frontend:** React 18, Vite, CSS Vanilla Premium (Minimalist UI rules), Lucide Icons.
@@ -84,7 +84,7 @@ Al encenderse por primera vez, el contenedor de base de datos ejecuta automátic
 *   **Sitio Web Informativo (Landing Page):** [http://localhost:8081](http://localhost:8081)
 *   **Swagger de la API (Backend docs):** [http://localhost:8001/docs](http://localhost:8001/docs)
 
-### 👥 Cuentas de Acceso Demo (Contraseña común: `password`)
+###  Cuentas de Acceso Demo (Contraseña común: `password`)
 | Especialista | Rol | Usuario | Contraseña |
 | :--- | :--- | :--- | :--- |
 | **Dra. Gabriela Ramos** | Doctor / Directora Médica | `Dra.Gabriela` | `password` |
@@ -95,7 +95,7 @@ Al encenderse por primera vez, el contenedor de base de datos ejecuta automátic
 
 ---
 
-## 👨‍💻 Desarrolladores
+##  Desarrolladores
 
 Este proyecto fue desarrollado y diseñado con fines profesionales por:
 
