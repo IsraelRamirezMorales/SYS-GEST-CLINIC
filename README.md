@@ -1,5 +1,9 @@
 #  SYS-GEST-CLINIC: Sistema de Gestión y Control de Citas Clínicas
 
+<p align="center">
+  <img src="img/logoSysGesCli.jpg" alt="SYS-GEST-CLINIC Logo" width="250">
+</p>
+
 **SYS-GEST-CLINIC** es una solución digital integral y premium diseñada para optimizar y automatizar el control de agendas, expedientes de pacientes y reportes operativos en clínicas de fisioterapia y rehabilitación física.
 
 ---
