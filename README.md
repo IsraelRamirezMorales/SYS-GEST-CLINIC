@@ -20,18 +20,22 @@ A continuación se detallan las interfaces clave del sistema utilizando capturas
 
 ###  1. Pantalla de Inicio de Sesión (Login)
 Una pantalla de acceso segura diseñada bajo directrices de minimalismo utilitario oscuro. Cuenta con una ilustración 3D de fisioterapia personalizada y campos con prefijos de iconos interactivos para guiar al usuario.
+
 ![Pantalla de Login](img/LOGIN.png)
 
 ### 🎛️ 2. Panel Principal (Dashboard)
 El menú de inicio móvil (Mobile First) permite al personal de salud acceder rápidamente a todas las herramientas del sistema: consultar calendarios, ver citas asignadas, agregar nuevos pacientes o analizar el historial.
+
 ![Dashboard Principal](img/HOME%20PAGE.png)
 
 ###  3. Calendario Clínico Interactivo
 Un calendario mensual dinámico que resalta los días con citas programadas y permite a los especialistas ver el detalle horario de cada consulta, sesión terapéutica o rehabilitación en alberca, con badges de colores asociados.
+
 ![Calendario Mensual](img/CALENDARIO.png)
 
 ###  4. Estadísticas y Reportes Operativos
 Un panel inteligente de Business Intelligence (BI) que procesa las asistencias y los tipos de sesión en tiempo real para generar métricas semanales, mensuales y anuales de la clínica, distribuidas por terapeuta.
+
 ![Estadísticas Clínicas](img/REGISTROS.png)
 
 ---
@@ -79,9 +83,6 @@ Esto creará la base de datos local aislada `sysgest_db`, compilará el backend 
 ### Paso 2: Inicialización y Datos de Prueba (Seed)
 Al encenderse por primera vez, el contenedor de base de datos ejecuta automáticamente los scripts de `database/sql/` para crear las tablas relacionales y precargar datos de prueba que alimentan los reportes y agendas con fechas dinámicas relativas al día actual.
 
-### Enlaces de Acceso Local
-*   **Aplicación de Fisioterapia (Frontend):** [http://localhost:5174](http://localhost:5174)
-*   **Swagger de la API (Backend docs):** [http://localhost:8001/docs](http://localhost:8001/docs)
 
 ###  Cuentas de Acceso Demo (Contraseña común: `password`)
 | Especialista | Rol | Usuario | Contraseña |
@@ -94,12 +95,21 @@ Al encenderse por primera vez, el contenedor de base de datos ejecuta automátic
 
 ---
 
-##  Desarrolladores
+## Equipo de Desarrollo
 
 Este proyecto fue desarrollado y diseñado con fines profesionales por:
 
-*   **Gabriel Chacón Arellano**
-*   **Israel Ramírez Morales**
+### Gabriel Chacón Arellano
+- Desarrollo Backend.
+- Diseño de la arquitectura del sistema.
+- Modelado e implementación de la base de datos.
+
+### Israel Ramírez Morales
+- Desarrollo Frontend.
+- Diseño de la interfaz de usuario (UI).
+- Implementación de funcionalidades especiales.
+- Integración y optimización de tecnologías orientadas al alto rendimiento y la eficiencia de la base de datos.
+- Desarrollo de soluciones innovadoras para mejorar la velocidad, escalabilidad y experiencia general del sistema.
 
 ---
 *SYS-GEST-CLINIC - Soluciones de Gestión y Control en Salud Física 2026.*
