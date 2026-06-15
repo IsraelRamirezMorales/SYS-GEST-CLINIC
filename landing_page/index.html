@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REMES — Rehabilitación Médica Especializada | Morelia, Michoacán</title>
+  <meta name="description" content="REMES Rehabilitación Médica Especializada en Morelia, Michoacán. Fisioterapia acuática funcional, terapia física y ocupacional. Dras. María del Carmen Arellano y Ana Fernanda Gordillo." />
+  <meta name="keywords" content="rehabilitación médica, fisioterapia, Morelia, Michoacán, terapia acuática, terapia física, terapia ocupacional" />
+  <meta property="og:title" content="REMES Rehabilitación Médica Especializada" />
+  <meta property="og:description" content="Clínica de rehabilitación médica especializada en Morelia, Michoacán. Fisioterapia acuática y terapia física." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#inicio" class="nav-logo" id="nav-logo-link">
+        <img src="img/image.png" alt="REMES" class="logo-img" />
+        <div class="nav-brand-text">
+          <span class="nav-brand-name">REMES</span>
+          <span class="nav-brand-sub">Rehabilitación Especializada</span>
+        </div>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="#servicios" class="nav-link">Servicios</a>
+        <a href="#instalaciones" class="nav-link">Instalaciones</a>
+        <a href="#equipo" class="nav-link">Equipo Médico</a>
+        <a href="#contacto" class="nav-link">Contacto</a>
+      </nav>
+      <a href="tel:4433128578" class="btn-nav" id="btn-nav-cta">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18l.19-.08z"/></svg>
+        443 312 8578
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <a href="#servicios" class="mobile-link">Servicios</a>
+      <a href="#instalaciones" class="mobile-link">Instalaciones</a>
+      <a href="#equipo" class="mobile-link">Equipo Médico</a>
+      <a href="#contacto" class="mobile-link">Contacto</a>
+      <a href="tel:4433128578" class="btn-mobile-cta">Llamar: 443 312 8578</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+
+    <!-- Fondo borroso con overlay -->
+    <div class="hero-bg" aria-hidden="true">
+      <img src="img/image (1).png" alt="" class="hero-bg-img" />
+      <div class="hero-bg-overlay"></div>
+    </div>
+
+    <!-- Contenido centrado -->
+    <div class="hero-inner">
+
+      <!-- Tarjeta glassmorphism izquierda -->
+      <div class="hero-glass fade-up">
+        <p class="hero-eyebrow">Morelia, Michoacán</p>
+        <h1 class="hero-headline">
+          Rehabilitación<br />
+          <em>que transforma</em><br />
+          vidas
+        </h1>
+        <p class="hero-sub">
+          Fisioterapia acuática funcional, terapia física y ocupacional con especialistas comprometidos con tu recuperación.
+        </p>
+        <div class="hero-actions">
+          <a href="#contacto" class="btn-hero-primary" id="hero-cta">
+            Agendar consulta
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="tel:4433128578" class="btn-hero-ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18l.19-.08z"/></svg>
+            443 312 8578
+          </a>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="hero-trust">
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Fisioterapia Acuática</span>
+          </div>
+          <div class="trust-sep" aria-hidden="true"></div>
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Terapia Física y Ocupacional</span>
+          </div>
+          <div class="trust-sep" aria-hidden="true"></div>
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Especialistas certificadas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Foto derecha -->
+      <div class="hero-visual">
+        <div class="hero-img-wrap">
+          <img src="img/image (4).png" alt="Sesión de Fisioterapia Acuática Funcional en REMES" class="hero-img" />
+          <div class="hero-img-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            Instalaciones certificadas
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="hero-scroll-indicator" aria-hidden="true">
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- INFO STRIP -->
+  <div class="info-strip">
+    <div class="info-strip-inner">
+      <div class="info-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        Ana María Gallaga 731, Morelia, Mich.
+      </div>
+      <div class="info-sep" aria-hidden="true"></div>
+      <div class="info-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18l.19-.08z"/>
+        </svg>
+        443 312 8578
+      </div>
+      <div class="info-sep" aria-hidden="true"></div>
+      <div class="info-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        remesmorelia@outlook.com
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <section class="section" id="servicios">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nuestros servicios</h2>
+        <p class="section-sub">Programas de rehabilitación diseñados por especialistas para cada etapa de tu recuperación.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="service-card service-card--featured fade-up">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>
+              <path d="M12 8v4l3 3"/>
+            </svg>
+          </div>
+          <h3 class="service-name">Fisioterapia Acuática Funcional</h3>
+          <p class="service-desc">Programa especializado en medio acuático que aprovecha las propiedades del agua para facilitar la rehabilitación con menor impacto articular.</p>
+          <div class="service-tag">Tratamiento estrella</div>
+        </div>
+
+        <div class="service-card fade-up fade-up-delay-1">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/>
+              <line x1="10" y1="1" x2="10" y2="4"/>
+              <line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <h3 class="service-name">Terapia Física</h3>
+          <p class="service-desc">Evaluación y tratamiento de lesiones musculoesqueléticas mediante técnicas manuales, ejercicio terapéutico y agentes físicos.</p>
+        </div>
+
+        <div class="service-card fade-up fade-up-delay-2">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v4"/>
+              <path d="M12 16h.01"/>
+            </svg>
+          </div>
+          <h3 class="service-name">Terapia Ocupacional</h3>
+          <p class="service-desc">Recuperación de habilidades funcionales para la vida cotidiana, el trabajo y la participación social con enfoque integral.</p>
+        </div>
+
+        <div class="service-card fade-up fade-up-delay-3">
+          <div class="service-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3 class="service-name">Rehabilitación Neurológica</h3>
+          <p class="service-desc">Atención especializada para pacientes con condiciones neurológicas, orientada a maximizar la independencia funcional.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALACIONES -->
+  <section class="section section--teal" id="instalaciones">
+    <div class="container">
+      <div class="installations-layout">
+        <div class="installations-text fade-up">
+          <h2 class="section-title section-title--light">Instalaciones de primer nivel</h2>
+          <p class="section-sub section-sub--light">
+            Contamos con alberca terapéutica climatizada y espacios diseñados para tu comodidad y recuperación óptima.
+          </p>
+          <ul class="features-list">
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Alberca terapéutica climatizada
+            </li>
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Área de terapia física equipada
+            </li>
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Sala de terapia ocupacional
+            </li>
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Espacios accesibles para todos
+            </li>
+          </ul>
+        </div>
+        <div class="installations-gallery fade-up fade-up-delay-1">
+          <div class="gallery-main">
+            <img src="img/image (1).png" alt="Alberca de hidroterapia REMES — vista principal" class="gallery-img gallery-img--main" />
+          </div>
+          <div class="gallery-thumb">
+            <img src="img/image (2).png" alt="Alberca terapéutica REMES — vista alternativa" class="gallery-img gallery-img--thumb" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO MÉDICO -->
+  <section class="section" id="equipo">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Equipo médico</h2>
+        <p class="section-sub">Especialistas con formación y experiencia clínica dedicados a tu bienestar.</p>
+      </div>
+
+      <div class="doctors-grid">
+        <div class="doctor-card fade-up">
+          <div class="doctor-avatar" aria-hidden="true">
+            <span>MC</span>
+          </div>
+          <div class="doctor-info">
+            <h3 class="doctor-name">Dra. María del Carmen Arellano Correa</h3>
+            <p class="doctor-specialty">Rehabilitación Médica Especializada</p>
+            <p class="doctor-desc">Especialista en rehabilitación integral con enfoque en fisioterapia acuática funcional y recuperación neuromuscular.</p>
+          </div>
+        </div>
+
+        <div class="doctor-card fade-up fade-up-delay-1">
+          <div class="doctor-avatar doctor-avatar--green" aria-hidden="true">
+            <span>AG</span>
+          </div>
+          <div class="doctor-info">
+            <h3 class="doctor-name">Dra. Ana Fernanda Gordillo</h3>
+            <p class="doctor-specialty">Rehabilitación Médica Especializada</p>
+            <p class="doctor-desc">Especialista en terapia física y ocupacional con amplia experiencia en rehabilitación funcional de adultos y adultos mayores.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="academic-block fade-up">
+        <img src="img/image (2).png" alt="Alberca terapéutica de REMES — vista adicional" class="academic-img" />
+        <div class="academic-overlay">
+          <p class="academic-label">Actualización continua</p>
+          <p class="academic-caption">Formación permanente en Fisioterapia Acuática Funcional</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="section section--dark" id="contacto">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-text fade-up">
+          <h2 class="section-title section-title--white">¿Listo para comenzar tu recuperación?</h2>
+          <p class="section-sub section-sub--muted">Contáctanos hoy mismo. Nuestro equipo está disponible para orientarte y agendar tu primera consulta.</p>
+
+          <div class="contact-details">
+            <a href="tel:4433128578" class="contact-item" id="contact-phone">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.78h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.4a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18l.19-.08z"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-label">Teléfono</span>
+                <span class="contact-value">443 312 8578</span>
+              </div>
+            </a>
+
+            <a href="mailto:remesmorelia@outlook.com" class="contact-item" id="contact-email">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-label">Correo electrónico</span>
+                <span class="contact-value">remesmorelia@outlook.com</span>
+              </div>
+            </a>
+
+            <a href="https://maps.google.com/?q=Ana+Maria+Gallaga+731+Morelia+Michoacan" target="_blank" rel="noopener noreferrer" class="contact-item" id="contact-address">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-label">Dirección</span>
+                <span class="contact-value">Ana María Gallaga 731, Morelia, Mich. C.P. 58000</span>
+              </div>
+            </a>
+
+            <a href="https://www.facebook.com/p/REMES-Rehabilitaci%C3%B3n-M%C3%A9dica-Especializada-100027689484971/" target="_blank" rel="noopener noreferrer" class="contact-item" id="contact-facebook">
+              <div class="contact-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </div>
+              <div>
+                <span class="contact-label">Facebook</span>
+                <span class="contact-value">REMES Rehabilitación Médica Especializada</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-map fade-up fade-up-delay-1">
+          <img src="img/image (3).png" alt="Ubicación de REMES en Morelia — Calle Ana María Gallaga 731" class="map-img" />
+          <a href="https://maps.google.com/?q=Ana+Maria+Gallaga+731+Morelia+Michoacan" target="_blank" rel="noopener noreferrer" class="map-cta" id="map-cta-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Abrir en Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="img/image.png" alt="REMES" class="footer-logo" />
+        <p class="footer-tagline">Rehabilitación Médica Especializada</p>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-address">Ana María Gallaga 731, Morelia, Michoacán, México. C.P. 58000</p>
+        <p class="footer-copy">&copy; 2025 REMES Rehabilitación Médica Especializada. Todos los derechos reservados.</p>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/p/REMES-Rehabilitaci%C3%B3n-M%C3%A9dica-Especializada-100027689484971/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook de REMES" id="footer-fb-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

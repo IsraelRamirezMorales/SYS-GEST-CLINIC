@@ -1,0 +1,36 @@
+services:
+  # Backend Web Service (FastAPI)
+  - type: web
+    name: clinica-remes-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Deberás configurar la URL de tu base de datos de Neon DB en Render
+      - key: PYTHONPATH
+        value: .
+
+  # Frontend Static Site (React + Vite)
+  - type: web
+    name: clinica-remes-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+
+  # Landing Page Static Site (HTML + CSS + JS Puro)
+  - type: web
+    name: clinica-remes-landing
+    env: static
+    rootDir: landing_page
+    publishDir: .
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate

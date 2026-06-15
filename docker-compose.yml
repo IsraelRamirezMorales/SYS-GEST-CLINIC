@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: clinica_db
+    restart: always
+    environment:
+      POSTGRES_USER: clinica_user
+      POSTGRES_PASSWORD: clinica_password
+      POSTGRES_DB: clinica_remes
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Mount initialization SQL scripts in the correct order
+      - ./database/sql/002_create_enums.sql:/docker-entrypoint-initdb.d/001_create_enums.sql
+      - ./database/sql/001_create_tables.sql:/docker-entrypoint-initdb.d/002_create_tables.sql
+      - ./database/sql/003_add_relationships.sql:/docker-entrypoint-initdb.d/003_add_relationships.sql
+      - ./database/sql/004_seed_data.sql:/docker-entrypoint-initdb.d/004_seed_data.sql
+
+  backend:
+    build: ./backend
+    container_name: clinica_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    # Para conectar a tu base de datos de producción Neon directamente, descomenta 'env_file'
+    # y comenta la sección 'environment'.
+    env_file:
+      - ./backend/.env
+    # environment:
+    #   - DATABASE_URL=postgresql://clinica_user:clinica_password@db:5432/clinica_remes
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: clinica_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+  landing:
+    image: nginx:alpine
+    container_name: clinica_landing
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./landing_page:/usr/share/nginx/html:ro
+
+volumes:
+  pgdata:
