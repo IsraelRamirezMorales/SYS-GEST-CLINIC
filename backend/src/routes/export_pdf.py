@@ -136,8 +136,8 @@ def export_pdf(req: ExportPDFRequest):
     story = []
     
     # Header brand block
-    story.append(Paragraph("REMES", title_style))
-    story.append(Paragraph("Rehabilitación Médica Especializada | Morelia, Michoacán", subtitle_style))
+    story.append(Paragraph("SYS-GEST-CLINIC", title_style))
+    story.append(Paragraph("Sistema de Gestión y Control Clínico | Morelia, Michoacán", subtitle_style))
     
     # Date block
     current_date = datetime.now().strftime("%d/%m/%Y")

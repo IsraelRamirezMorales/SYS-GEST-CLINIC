@@ -42,6 +42,46 @@ Un panel inteligente de Business Intelligence (BI) que procesa las asistencias y
 
 ![Estadísticas Clínicas](img/REGISTROS.png)
 
+###  5. Registro de Pacientes
+Formulario intuitivo y optimizado para dar de alta a nuevos pacientes, recopilando información clave como contacto, aseguradora y el médico que los remite.
+
+![Registro de Pacientes](img/Agregar%20un%20paciente.png)
+
+### 🩺 6. Notas Iniciales del Paciente
+Modal flotante para agregar instrucciones médicas especiales, precauciones o diagnósticos de entrada para la rehabilitación del paciente.
+
+![Notas Iniciales](img/Notas%20iniciales%20del%20paciente.png)
+
+### 📋 7. Listado General de Pacientes
+Un listado dinámico e interactivo de todos los pacientes en el sistema, con buscador por nombre o teléfono en tiempo real y botones directos para gestionar notas, agendar citas o editar información.
+
+![Vista General de Pacientes](img/vista%20de%20todos%20mis%20pacientes.png)
+
+### 🗂️ 8. Pacientes Asignados (Mis Pacientes)
+Espacio de trabajo para el terapeuta donde puede ver las tarjetas de sus pacientes programados, registrar asistencias y gestionar sus sesiones individuales.
+
+![Mis Pacientes](img/mis%20pacientes.png)
+
+### 📝 9. Ventana Emergente de Consulta (Valoración)
+Ventana emergente en la que el médico o terapeuta redacta la valoración de la consulta antes de generar y exportar la receta o nota médica formal.
+
+![Ventana Emergente PDF](img/ventana%20emergente%20de%20pdf.png)
+
+### 📄 10. Documento PDF Exportado
+La nota de valoración final en formato PDF generada dinámicamente. Cuenta con un diseño premium y limpio que incluye los datos del paciente, del terapeuta, la nota médica y áreas de firmas.
+
+![PDF Exportado](img/pdf%20exportado.png)
+
+### 📷 11. Gestión de Perfil e Imagen
+Un menú deslizable inferior (bottom sheet) que permite a los usuarios cambiar su foto de perfil utilizando archivos locales o la cámara web en vivo.
+
+![Cambiar foto de perfil](img/Cambiar%20foto%20de%20perfil.png)
+
+### ⚠️ 12. Validaciones y Manejo de Errores
+El sistema muestra retroalimentación visual clara y elegante en caso de errores en los formularios, fallas en la red o colisiones de citas en la agenda.
+
+![Manejo de errores](img/manejo%20de%20errores.png)
+
 ---
 
 ##  Módulos y Funcionalidades Detalladas
