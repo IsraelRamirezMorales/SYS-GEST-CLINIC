@@ -6,3 +6,4 @@ passlib
 bcrypt
 cloudinary
 python-multipart
+reportlab

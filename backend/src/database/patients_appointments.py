@@ -18,7 +18,7 @@ def patient_apponintment(id_employees):
     if tipo_fisio == 'Acuática':
         cur.execute(
                     """
-                    SELECT p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
+                    SELECT p.id_patient,p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
                     FROM patients p INNER JOIN  sesions s ON s.id_patient = p.id_patient WHERE s.state IN ('Sin empezar', 'Asistió', 'No Asistió')   ORDER BY entry_time ASC 
                     
                     """,
@@ -34,7 +34,7 @@ def patient_apponintment(id_employees):
     else:
         cur.execute(
                     """
-                    SELECT p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
+                    SELECT p.id_patient,p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
                     FROM patients p INNER JOIN  sesions s ON s.id_patient = p.id_patient  WHERE  p.doctor_charge = %s AND s.state IN ('Sin empezar', 'Asistió', 'No Asistió')  ORDER BY entry_time ASC 
                     
                     """,

@@ -300,8 +300,13 @@ function App() {
   const [notesPatientId, setNotesPatientId] = useState(null);
   const [notesText, setNotesText] = useState('');
 
-  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [instructionsText, setInstructionsText] = useState('');
+
+  const [showConsultationModal, setShowConsultationModal] = useState(false);
+  const [consultationPatient, setConsultationPatient] = useState(null);
+  const [consultationText, setConsultationText] = useState('');
+  const [exportingPdf, setExportingPdf] = useState(false);
 
   // New Patient Form state
   const [newPatient, setNewPatient] = useState({
@@ -809,6 +814,50 @@ function App() {
     }
   };
 
+  const handleOpenConsultationModal = (patientOrAppt) => {
+    setConsultationPatient(patientOrAppt);
+    setConsultationText('');
+    setShowConsultationModal(true);
+  };
+
+  const handleExportPdf = async () => {
+    if (!consultationPatient || !consultationText.trim()) {
+      showAlert('Información', 'Por favor, escribe el contenido de la consulta.', 'info');
+      return;
+    }
+    setExportingPdf(true);
+    try {
+      const response = await fetch(`${API_URL}/export_pdf/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_patient: consultationPatient.id_patient,
+          text: consultationText,
+          id_employees: user.id_employees
+        })
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `consulta_${consultationPatient.name}_${consultationPatient.last_name}.pdf`.replace(/\s+/g, '_');
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        setShowConsultationModal(false);
+      } else {
+        showAlert('Error', 'No se pudo generar el PDF de la consulta.', 'error');
+      }
+    } catch (e) {
+      console.error(e);
+      showAlert('Error de Conexión', 'No se pudo conectar con el servidor para exportar el PDF.', 'error');
+    } finally {
+      setExportingPdf(false);
+    }
+  };
+
   const submitAttendance = async (attended) => {
     try {
       const res = await fetch(`${API_URL}/asistance/`, {
@@ -1306,33 +1355,41 @@ function App() {
                           <span className="patient-card-detail"><strong>Estado: {appt.state}</strong></span>
                         )}
                         
-                        {appt.state === 'Sin empezar' && (
-                          !(user && user.id_employees === 9 && appt.sesion_type !== 'Alberca') ? (
-                            <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
-                              <button 
-                                className="pill-btn pill-btn-small"
-                                onClick={() => {
-                                  setAttendanceSessionId(appt.id_sesion);
-                                  setShowAttendanceDialog(true);
-                                }}
-                              >
-                                Registrar asistencia
-                              </button>
-                              <button 
-                                type="button"
-                                className="pill-btn pill-btn-small pill-btn-danger"
-                                onClick={() => {
-                                  setChangeDateSessionId(appt.id_sesion);
-                                  setChangeDateValue(appt.entry_date ? appt.entry_date.split('T')[0] : '');
-                                  setChangeTimeValue(appt.entry_time || '09:00:00');
-                                  setShowChangeDateDialog(true);
-                                }}
-                              >
-                                Cambiar fecha
-                              </button>
-                            </div>
-                          ) : null
-                        )}
+                        <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {appt.state === 'Sin empezar' && 
+                            !(user && user.id_employees === 9 && appt.sesion_type !== 'Alberca') && (
+                              <>
+                                <button 
+                                  className="pill-btn pill-btn-small"
+                                  onClick={() => {
+                                    setAttendanceSessionId(appt.id_sesion);
+                                    setShowAttendanceDialog(true);
+                                  }}
+                                >
+                                  Registrar asistencia
+                                </button>
+                                <button 
+                                  type="button"
+                                  className="pill-btn pill-btn-small pill-btn-danger"
+                                  onClick={() => {
+                                    setChangeDateSessionId(appt.id_sesion);
+                                    setChangeDateValue(appt.entry_date ? appt.entry_date.split('T')[0] : '');
+                                    setChangeTimeValue(appt.entry_time || '09:00:00');
+                                    setShowChangeDateDialog(true);
+                                  }}
+                                >
+                                  Cambiar fecha
+                                </button>
+                              </>
+                            )
+                          }
+                          <button 
+                            className="pill-btn pill-btn-small"
+                            onClick={() => handleOpenConsultationModal(appt)}
+                          >
+                            Consulta
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -1498,6 +1555,13 @@ function App() {
                         }}
                       >
                         Editar
+                      </button>
+
+                      <button 
+                        className="pill-btn pill-btn-small"
+                        onClick={() => handleOpenConsultationModal(p)}
+                      >
+                        Consulta
                       </button>
                     </div>
                   </div>
@@ -1848,7 +1912,43 @@ function App() {
         </div>
       )}
 
-      {/* D. COLLISION CONFIRMATION MODAL */}
+      {/* D. CONSULTATION PDF DIALOG */}
+      {showConsultationModal && consultationPatient && (
+        <div className="dialog-overlay">
+          <div className="dialog-box" style={{ maxWidth: '450px', width: '90%' }}>
+            <h3 className="dialog-title">Nota de Consulta</h3>
+            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '12px' }}>
+              Paciente: <strong>{consultationPatient.name} {consultationPatient.last_name}</strong>
+            </p>
+            <textarea 
+              className="form-input" 
+              style={{ width: '100%', minHeight: '180px', textAlign: 'left', padding: '10px', marginBottom: '16px', fontSize: '14px', lineHeight: '1.5' }}
+              value={consultationText}
+              onChange={(e) => setConsultationText(e.target.value)}
+              placeholder="Escribe la valoración de la consulta o prescripción médica aquí..."
+              disabled={exportingPdf}
+            />
+            <div className="dialog-actions">
+              <button 
+                className="dialog-btn-text" 
+                onClick={() => setShowConsultationModal(false)}
+                disabled={exportingPdf}
+              >
+                Cancelar
+              </button>
+              <button 
+                className="dialog-btn-primary" 
+                onClick={handleExportPdf}
+                disabled={exportingPdf || !consultationText.trim()}
+              >
+                {exportingPdf ? 'Generando...' : 'Exportar a PDF'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* E. COLLISION CONFIRMATION MODAL */}
       {showCollisionDialog && (
         <div className="dialog-overlay">
           <div className="dialog-box" style={{ maxWidth: '380px', padding: '0', overflow: 'hidden' }}>

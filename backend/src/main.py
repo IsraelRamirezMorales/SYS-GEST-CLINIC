@@ -19,6 +19,7 @@ from src.routes.check_collision import router as check_collision
 from src.routes.reports import router as reports_router
 from src.routes.change_session_date import router as change_session_date
 from src.routes.profile import router as profile_router
+from src.routes.export_pdf import router as export_pdf_router
 
 app = FastAPI()
 @app.options("/{rest_of_path:path}")
@@ -56,3 +57,4 @@ app.include_router(check_collision)
 app.include_router(reports_router)
 app.include_router(change_session_date)
 app.include_router(profile_router)
+app.include_router(export_pdf_router)
