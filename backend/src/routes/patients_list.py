@@ -1,16 +1,11 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
-from datetime import date
-from src.database.patients_list import patients_list
+from fastapi import APIRouter, Depends
 
+from src.database.patients_list import patients_list
+from src.utils.security import CurrentUser, get_current_user
 
 router = APIRouter(prefix="/patients_list")
 
 
-
 @router.get("/")
-def patient_list(id_employees: int):
-   print(id_employees)
-   return patients_list(id_employees)
-   
-   
+def patient_list(user: CurrentUser = Depends(get_current_user)):
+    return patients_list(user)

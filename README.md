@@ -106,7 +106,7 @@ El sistema muestra retroalimentación visual clara y elegante en caso de errores
 
 ##  Tecnologías y Arquitectura
 
-*   **Backend:** Python 3.12, FastAPI, Uvicorn, PostgreSQL (psycopg2-binary), Passlib, Bcrypt.
+*   **Backend:** Python 3.12, FastAPI, Uvicorn, PostgreSQL (psycopg2-binary), Bcrypt, PyJWT (autenticación por token).
 *   **Frontend:** React 18, Vite, CSS Vanilla Premium (Minimalist UI rules), Lucide Icons.
 *   **Base de Datos:** PostgreSQL 15, optimizada con triggers relacionales y restricciones de integridad.
 *   **Contenedores e Infraestructura:** Docker y Docker Compose para un despliegue local aislado y multiservicio.

@@ -1,22 +1,23 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
 from datetime import date, time
-from src.database.add_sesion import add_sesions
-from typing import Optional
 
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
+from src.database.add_sesion import add_sesions
+from src.utils.security import CurrentUser, get_current_user
+from src.utils.validation import Id, SesionType
 
 router = APIRouter(prefix="/add_sesion")
 
-class LoginData(BaseModel):
-    id_patient : int
+
+class NewSession(BaseModel):
+    id_patient: Id
     entry_time: time
     entry_date: date
-    sesion_type: str
-    id_employees: int
-    
+    sesion_type: SesionType
+
 
 @router.post("/")
-def add_sesion(data: LoginData):
-   add_sesions(data.id_patient,data.entry_time,data.entry_date,data.sesion_type,data.id_employees)
-
-   
+def add_sesion(data: NewSession, user: CurrentUser = Depends(get_current_user)):
+    add_sesions(user, data.id_patient, data.entry_time, data.entry_date, data.sesion_type)
+    return {"ok": True}

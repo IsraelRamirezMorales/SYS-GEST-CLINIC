@@ -4,6 +4,31 @@ import './App.css';
 
 const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8000' : 'https://cl-nica-remes.onrender.com');
 
+const TOKEN_KEY = 'clinica_token';
+const USER_KEY = 'clinica_user';
+const UNAUTHORIZED_EVENT = 'clinica:unauthorized';
+
+const getToken = () => {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+};
+
+// fetch autenticado: agrega el token y, si el backend responde 401 (token vencido o
+// inválido), avisa a la app para cerrar la sesión.
+const authFetch = async (url, options = {}) => {
+  const token = getToken();
+  const headers = { ...(options.headers || {}) };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(url, { ...options, headers });
+  if (res.status === 401) {
+    window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
+  }
+  return res;
+};
+
 const getSessionDisplayText = (sesion_type, doctor_charge) => {
   const docId = parseInt(doctor_charge);
   if (sesion_type === 'Consulta') {
@@ -225,11 +250,10 @@ function App() {
   const uploadCroppedPicture = async (file) => {
     setProfilePictureUploading(true);
     const formData = new FormData();
-    formData.append("id_employees", user.id_employees);
     formData.append("file", file);
 
     try {
-      const res = await fetch(`${API_URL}/profile/upload_picture/`, {
+      const res = await authFetch(`${API_URL}/profile/upload_picture/`, {
         method: "POST",
         body: formData,
       });
@@ -237,7 +261,7 @@ function App() {
       if (data.ok) {
         const updatedUser = { ...user, profile_picture: data.url };
         setUser(updatedUser);
-        localStorage.setItem("clinica_user", JSON.stringify(updatedUser));
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
         showAlert("¡Éxito!", "Foto de perfil actualizada correctamente.", "success");
       } else {
         showAlert("Error", "Error al subir la foto: " + (data.error || ""), "error");
@@ -253,15 +277,14 @@ function App() {
   const handleDeleteProfilePicture = async () => {
     setProfilePictureUploading(true);
     try {
-      const res = await fetch(`${API_URL}/profile/delete_picture/`, {
-        method: "POST",
-        body: new URLSearchParams({ id_employees: user.id_employees })
+      const res = await authFetch(`${API_URL}/profile/delete_picture/`, {
+        method: "POST"
       });
       const data = await res.json();
       if (data.ok) {
         const updatedUser = { ...user, profile_picture: null };
         setUser(updatedUser);
-        localStorage.setItem("clinica_user", JSON.stringify(updatedUser));
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
         showAlert("¡Éxito!", "Foto de perfil eliminada correctamente.", "success");
         setShowOptionsModal(false);
       } else {
@@ -373,7 +396,7 @@ function App() {
     if (!user) return;
     setReportsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/reports/?id_employees=${user.id_employees}`);
+      const res = await authFetch(`${API_URL}/reports/`);
       if (res.ok) {
         const data = await res.json();
         setReportsData(data);
@@ -406,11 +429,21 @@ function App() {
 
   // Load persistent login session on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('clinica_user');
-    if (savedUser) {
-      const parsed = JSON.parse(savedUser);
+    let parsed;
+    try {
+      const savedUser = localStorage.getItem(USER_KEY);
+      parsed = savedUser && getToken() ? JSON.parse(savedUser) : null;
+      if (!parsed) {
+        // Sesiones antiguas sin token ya no son válidas.
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem(TOKEN_KEY);
+      }
+    } catch {
+      parsed = null;
+    }
+    if (parsed) {
       setUser(parsed);
-      fetchFisioType(parsed.id_employees);
+      fetchFisioType();
       setCurrentView('menu');
     }
   }, []);
@@ -423,9 +456,9 @@ function App() {
     }
   }, [user]);
 
-  const fetchFisioType = async (employeeId) => {
+  const fetchFisioType = async () => {
     try {
-      const res = await fetch(`${API_URL}/fisio_type/?id_employees=${employeeId}`);
+      const res = await authFetch(`${API_URL}/fisio_type/`);
       if (res.ok) {
         const data = await res.json();
         setFisioType(data.fisio_type || '');
@@ -439,7 +472,7 @@ function App() {
     if (!user) return;
     setPatientsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/patients_list/?id_employees=${user.id_employees}`);
+      const res = await authFetch(`${API_URL}/patients_list/`);
       if (res.ok) {
         const data = await res.json();
         setPatients(data || []);
@@ -456,7 +489,7 @@ function App() {
     if (!user) return;
     setAppointmentsLoading(true);
     try {
-      const res = await fetch(`${API_URL}/patients_appointments/?id_employees=${user.id_employees}`);
+      const res = await authFetch(`${API_URL}/patients_appointments/`);
       if (res.ok) {
         const data = await res.json();
         setAppointments(data || []);
@@ -486,9 +519,14 @@ function App() {
         })
       });
 
-      if (res.ok) {
+      if (res.status === 401) {
+        setAuthError('Usuario o contraseña incorrectos.');
+      } else if (res.status === 429) {
+        setAuthError('Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.');
+      } else if (res.ok) {
         const data = await res.json();
-        if (data.ok) {
+        if (data.ok && data.access_token) {
+          localStorage.setItem(TOKEN_KEY, data.access_token);
           const loggedInUser = {
             id_employees: data.id_employees,
             username: data.username,
@@ -498,11 +536,11 @@ function App() {
             profile_picture: data.profile_picture
           };
           setUser(loggedInUser);
-          localStorage.setItem('clinica_user', JSON.stringify(loggedInUser));
+          localStorage.setItem(USER_KEY, JSON.stringify(loggedInUser));
           
           setPatientsFetched(false);
           setAppointmentsFetched(false);
-          fetchFisioType(data.id_employees);
+          setFisioType(data.fisio_type || '');
           setHistory([]);
           setCurrentView('menu');
         } else {
@@ -520,7 +558,8 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('clinica_user');
+    localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
     setUser(null);
     setPatients([]);
     setPatientsFetched(false);
@@ -533,17 +572,27 @@ function App() {
     setCurrentView('login');
   };
 
+  // Si el backend rechaza el token (vencido o inválido), se cierra la sesión.
+  useEffect(() => {
+    const onUnauthorized = () => {
+      if (!getToken() && !localStorage.getItem(USER_KEY)) return;
+      handleLogout();
+      showAlert('Sesión expirada', 'Tu sesión ha expirado. Inicia sesión de nuevo.', 'info');
+    };
+    window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+  }, []);
+
   const handleUploadProfilePicture = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setProfilePictureUploading(true);
     const formData = new FormData();
-    formData.append("id_employees", user.id_employees);
     formData.append("file", file);
 
     try {
-      const res = await fetch(`${API_URL}/profile/upload_picture/`, {
+      const res = await authFetch(`${API_URL}/profile/upload_picture/`, {
         method: "POST",
         body: formData,
       });
@@ -551,7 +600,7 @@ function App() {
       if (data.ok) {
         const updatedUser = { ...user, profile_picture: data.url };
         setUser(updatedUser);
-        localStorage.setItem("clinica_user", JSON.stringify(updatedUser));
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
         showAlert("¡Éxito!", "Foto de perfil actualizada correctamente.", "success");
       } else {
         showAlert("Error", "Error al subir la foto: " + (data.error || ""), "error");
@@ -565,7 +614,7 @@ function App() {
   };
   const submitPatientCreation = async (patientData) => {
     try {
-      const res = await fetch(`${API_URL}/add_patients/`, {
+      const res = await authFetch(`${API_URL}/add_patients/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(patientData)
@@ -618,7 +667,6 @@ function App() {
       name: newPatient.name,
       last_name: newPatient.last_name,
       phone: newPatient.phone,
-      id_employees: user.id_employees,
       doctor_selected: newPatient.doctor_selected || null,
       instructions: instructionsText || newPatient.instructions,
       aseguradora: newPatient.aseguradora || '',
@@ -642,7 +690,7 @@ function App() {
 
   const submitSessionCreation = async (sessionData) => {
     try {
-      const res = await fetch(`${API_URL}/add_sesion/`, {
+      const res = await authFetch(`${API_URL}/add_sesion/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sessionData)
@@ -672,7 +720,7 @@ function App() {
   const handleChangeSessionDate = async () => {
     if (!changeDateSessionId || !changeDateValue || !changeTimeValue) return;
     try {
-      const res = await fetch(`${API_URL}/change_session_date/`, {
+      const res = await authFetch(`${API_URL}/change_session_date/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -708,13 +756,12 @@ function App() {
       id_patient: parseInt(newSession.id_patient),
       entry_time: newSession.entry_time,
       entry_date: newSession.entry_date,
-      sesion_type: newSession.sesion_type,
-      id_employees: user.id_employees
+      sesion_type: newSession.sesion_type
     };
 
     try {
       // Check for collisions first
-      const checkRes = await fetch(`${API_URL}/check_collision/`, {
+      const checkRes = await authFetch(`${API_URL}/check_collision/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -746,7 +793,7 @@ function App() {
   const handleEditPatient = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${API_URL}/edit_patient_info/`, {
+      const res = await authFetch(`${API_URL}/edit_patient_info/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editPatientForm)
@@ -769,7 +816,7 @@ function App() {
 
   const handleLoadNotes = async (patientId) => {
     try {
-      const res = await fetch(`${API_URL}/show_info/`, {
+      const res = await authFetch(`${API_URL}/show_info/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -791,7 +838,7 @@ function App() {
 
   const handleSaveNotes = async () => {
     try {
-      const res = await fetch(`${API_URL}/update_notes/`, {
+      const res = await authFetch(`${API_URL}/update_notes/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -827,13 +874,12 @@ function App() {
     }
     setExportingPdf(true);
     try {
-      const response = await fetch(`${API_URL}/export_pdf/`, {
+      const response = await authFetch(`${API_URL}/export_pdf/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id_patient: consultationPatient.id_patient,
-          text: consultationText,
-          id_employees: user.id_employees
+          text: consultationText
         })
       });
       if (response.ok) {
@@ -860,7 +906,7 @@ function App() {
 
   const submitAttendance = async (attended) => {
     try {
-      const res = await fetch(`${API_URL}/asistance/`, {
+      const res = await authFetch(`${API_URL}/asistance/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

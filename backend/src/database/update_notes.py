@@ -1,26 +1,9 @@
-from src.database.conection import *
+from src.database.access import require_patient_access
+from src.database.db import get_cursor
+from src.utils.security import CurrentUser
 
-def update_note(id_patient,imp_data):
-    
 
-    
-   
-    conn = psycopg2.connect(getconection())
-    cur = conn.cursor()
-    cur.execute(
-                """
-                UPDATE patients
-                SET
-                imp_data = %s
-                
-                WHERE id_patient = %s;
-
-                """,
-                (imp_data,id_patient)
-            )
-    conn.commit()
-    cur.close()
-    conn.close()
-
-            
-    return 
+def update_note(user: CurrentUser, id_patient: int, imp_data: str):
+    with get_cursor() as cur:
+        require_patient_access(cur, user, id_patient)
+        cur.execute("UPDATE patients SET imp_data = %s WHERE id_patient = %s", (imp_data, id_patient))

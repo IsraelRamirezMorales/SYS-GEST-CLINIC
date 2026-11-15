@@ -1,10 +1,11 @@
-from fastapi import APIRouter
-from src.database.get_fisi_type import get_patient_info
+from fastapi import APIRouter, Depends
+
+from src.utils.security import CurrentUser, get_current_user
 
 router = APIRouter(prefix="/fisio_type")
 
+
 @router.get("/")
-def get_fisio(id_employees: int):
-    return {
-        "fisio_type": get_patient_info(id_employees)
-    }
+def get_fisio(user: CurrentUser = Depends(get_current_user)):
+    # Viene del token: no hace falta consultar la BD.
+    return {"fisio_type": user.fisio_type}

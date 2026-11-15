@@ -1,30 +1,22 @@
-import psycopg2
-from src.database.conection import getconection
+from datetime import date, time
 
-def update_session_date(id_sesion: int, entry_date: str, entry_time: str):
-    conn = psycopg2.connect(getconection())
-    cur = conn.cursor()
-    try:
+from src.database.access import require_session_access
+from src.database.db import get_cursor
+from src.utils.security import CurrentUser
+
+
+def update_session_date(user: CurrentUser, id_sesion: int, entry_date: date, entry_time: time):
+    with get_cursor() as cur:
+        require_session_access(cur, user, id_sesion)
         cur.execute(
-            """
-            UPDATE sesions
-            SET entry_date = %s, entry_time = %s
-            WHERE id_sesion = %s;
-            """,
-            (entry_date, entry_time, id_sesion)
+            "UPDATE sesions SET entry_date = %s, entry_time = %s WHERE id_sesion = %s",
+            (entry_date, entry_time, id_sesion),
         )
         cur.execute(
             """
             UPDATE session_records
             SET entry_date = %s, entry_time = %s, updated_at = CURRENT_TIMESTAMP
-            WHERE id_sesion = %s;
+            WHERE id_sesion = %s
             """,
-            (entry_date, entry_time, id_sesion)
+            (entry_date, entry_time, id_sesion),
         )
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
-        raise e
-    finally:
-        cur.close()
-        conn.close()

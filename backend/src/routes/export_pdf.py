@@ -1,61 +1,47 @@
-from fastapi import APIRouter, HTTPException
+import io
+import re
+import unicodedata
+from datetime import datetime
+from xml.sax.saxutils import escape
+
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-import io
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from src.database.conection import getconection
-from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+
+from src.database.export_pdf import get_pdf_data
+from src.utils.security import CurrentUser, get_current_user
+from src.utils.validation import Id, LongText
 
 router = APIRouter(prefix="/export_pdf")
 
+
 class ExportPDFRequest(BaseModel):
-    id_patient: int
-    text: str
-    id_employees: int
+    id_patient: Id
+    text: LongText
+
+
+def _e(value) -> str:
+    """Escapa texto para Paragraph de reportlab (interpreta marcado tipo XML)."""
+    return escape("" if value is None else str(value))
+
+
+def _safe_filename(*parts: str) -> str:
+    raw = "_".join(p for p in parts if p)
+    ascii_only = unicodedata.normalize("NFKD", raw).encode("ascii", "ignore").decode()
+    cleaned = re.sub(r"[^A-Za-z0-9_-]+", "_", ascii_only).strip("_")
+    return f"consulta_{cleaned or 'paciente'}.pdf"
+
 
 @router.post("/")
-def export_pdf(req: ExportPDFRequest):
-    try:
-        conn = psycopg2.connect(getconection())
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        
-        # Query patient details and the doctor in charge
-        cur.execute(
-            """
-            SELECT p.name, p.last_name, p.phone, p.doctor_sender, p.amount_to_pay, p.aseguradora,
-                   e.name AS doctor_name, e.last_name AS doctor_last_name
-            FROM patients p
-            LEFT JOIN employees e ON p.doctor_charge = e.id_employees
-            WHERE p.id_patient = %s
-            """,
-            (req.id_patient,)
-        )
-        patient = cur.fetchone()
-        
-        # Query the therapist (employee creating the PDF)
-        cur.execute(
-            """
-            SELECT name, last_name, role FROM employees WHERE id_employees = %s
-            """,
-            (req.id_employees,)
-        )
-        employee = cur.fetchone()
-        
-        cur.close()
-        conn.close()
-        
-        if not patient:
-            raise HTTPException(status_code=404, detail="Patient not found")
-            
-    except Exception as e:
-        print("ERROR fetching details for PDF:", e)
-        raise HTTPException(status_code=500, detail="Database error")
-        
+def export_pdf(req: ExportPDFRequest, user: CurrentUser = Depends(get_current_user)):
+    patient, employee = get_pdf_data(user, req.id_patient)
+    if not patient:
+        raise HTTPException(status_code=404, detail="No encontrado")
+
     # Generate PDF in memory
     buffer = io.BytesIO()
     
@@ -153,20 +139,20 @@ def export_pdf(req: ExportPDFRequest):
     story.append(Spacer(1, 10))
     
     # Patient meta table
-    doctor_fullname = f"Dra. {patient['doctor_name']} {patient['doctor_last_name']}" if patient['doctor_name'] else "No asignada"
-    sender_name = patient['doctor_sender'] or "No especificado"
-    aseguradora = patient['aseguradora'] or "Ninguna"
+    doctor_fullname = f"Dra. {_e(patient['doctor_name'])} {_e(patient['doctor_last_name'])}" if patient['doctor_name'] else "No asignada"
+    sender_name = _e(patient['doctor_sender']) or "No especificado"
+    aseguradora = _e(patient['aseguradora']) or "Ninguna"
     
     meta_data = [
         [
             Paragraph("Paciente:", meta_label_style),
-            Paragraph(f"{patient['name']} {patient['last_name']}", meta_val_style),
+            Paragraph(f"{_e(patient['name'])} {_e(patient['last_name'])}", meta_val_style),
             Paragraph("Médico a cargo:", meta_label_style),
             Paragraph(doctor_fullname, meta_val_style)
         ],
         [
             Paragraph("Teléfono:", meta_label_style),
-            Paragraph(str(patient['phone']), meta_val_style),
+            Paragraph(_e(patient['phone']), meta_val_style),
             Paragraph("Médico remitente:", meta_label_style),
             Paragraph(sender_name, meta_val_style)
         ],
@@ -174,7 +160,7 @@ def export_pdf(req: ExportPDFRequest):
             Paragraph("Aseguradora:", meta_label_style),
             Paragraph(aseguradora, meta_val_style),
             Paragraph("Atendido por:", meta_label_style),
-            Paragraph(f"{employee['name']} {employee['last_name']}" if employee else "Sistema", meta_val_style)
+            Paragraph(f"{_e(employee['name'])} {_e(employee['last_name'])}" if employee else "Sistema", meta_val_style)
         ]
     ]
     
@@ -213,7 +199,7 @@ def export_pdf(req: ExportPDFRequest):
         if line.strip() == "":
             story.append(Spacer(1, 6))
         else:
-            story.append(Paragraph(line, body_style))
+            story.append(Paragraph(_e(line), body_style))
             
     story.append(Spacer(1, 45))
     
@@ -237,9 +223,9 @@ def export_pdf(req: ExportPDFRequest):
     doc.build(story)
     buffer.seek(0)
     
-    filename = f"consulta_{patient['name']}_{patient['last_name']}.pdf".replace(" ", "_")
+    filename = _safe_filename(patient['name'], patient['last_name'])
     return StreamingResponse(
         buffer,
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename={filename}"}
+        headers={"Content-Disposition": f'attachment; filename="{filename}"', "Cache-Control": "no-store"}
     )

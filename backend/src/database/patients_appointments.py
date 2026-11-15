@@ -1,50 +1,29 @@
+from src.database.db import get_cursor
+from src.utils.security import CurrentUser
 
-from src.database.id_employee import get_id
-from src.database.conection import *
-from psycopg2.extras import RealDictCursor
-from src.database.get_fisi_type import get_patient_info
-
-def patient_apponintment(id_employees):
-   
-    conn = psycopg2.connect(getconection())
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    
-
-
-    tipo_fisio  = get_patient_info(id_employees)
-    id_doctor = get_id(id_employees)
-    print(tipo_fisio, id_doctor)
-
-    if tipo_fisio == 'Acuática':
-        cur.execute(
-                    """
-                    SELECT p.id_patient,p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
-                    FROM patients p INNER JOIN  sesions s ON s.id_patient = p.id_patient WHERE s.state IN ('Sin empezar', 'Asistió', 'No Asistió')   ORDER BY entry_time ASC 
-                    
-                    """,
-                    
-                    
-                )
-        patients = cur.fetchall()
-    
-        cur.close()
-        conn.close()
+# El front solo muestra:
+#   - sesiones 'Sin empezar' de cualquier fecha (calendario y lista de citas)
+#   - sesiones atendidas / no atendidas del mes actual (búsqueda)
+# Antes se enviaba todo el historial. Se deja un día de margen por la zona horaria
+# (CURRENT_DATE es UTC en el servidor y el front filtra en hora local).
+_QUERY = """
+    SELECT p.id_patient, p.name, p.last_name, p.phone, p.amount_to_pay, p.aseguradora,
+           p.doctor_charge, s.id_sesion, s.entry_date, s.entry_time, s.state, s.sesion_type
+    FROM sesions s
+    INNER JOIN patients p ON s.id_patient = p.id_patient
+    WHERE (
+            s.state = 'Sin empezar'
+         OR s.entry_date >= (DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 day')::DATE
+          )
+      {scope}
+    ORDER BY s.entry_time ASC
+"""
 
 
-    else:
-        cur.execute(
-                    """
-                    SELECT p.id_patient,p.name,p.last_name,p.phone,p.amount_to_pay,s.entry_date ,s.entry_time, s.state,s.id_sesion,s.sesion_type,p.aseguradora,p.doctor_charge
-                    FROM patients p INNER JOIN  sesions s ON s.id_patient = p.id_patient  WHERE  p.doctor_charge = %s AND s.state IN ('Sin empezar', 'Asistió', 'No Asistió')  ORDER BY entry_time ASC 
-                    
-                    """,
-                    (id_doctor,)
-                    
-                )
-        patients = cur.fetchall()
-    
-        cur.close()
-        conn.close()
-
-            
-    return patients
+def patient_apponintment(user: CurrentUser):
+    with get_cursor() as cur:
+        if user.is_acuatic:
+            cur.execute(_QUERY.format(scope=""))
+        else:
+            cur.execute(_QUERY.format(scope="AND p.doctor_charge = %s"), (user.scope_doctor,))
+        return cur.fetchall()
