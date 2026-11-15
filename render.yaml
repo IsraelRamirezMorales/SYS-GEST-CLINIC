@@ -11,6 +11,10 @@ services:
         sync: false # Deberás configurar la URL de tu base de datos de Neon DB en Render
       - key: PYTHONPATH
         value: .
+      - key: JWT_SECRET
+        generateValue: true # Render genera un secreto aleatorio para firmar los tokens
+      - key: ENABLE_DOCS
+        value: "false"
 
   # Frontend Static Site (React + Vite)
   - type: web

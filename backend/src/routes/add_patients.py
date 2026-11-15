@@ -1,33 +1,35 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
-from datetime import date
 from typing import Optional
 
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
 from src.database.add_patien import add_patient
+from src.utils.security import CurrentUser, get_current_user
+from src.utils.validation import LongText, PersonName, Phone, ShortText
 
 router = APIRouter(prefix="/add_patients")
 
 
-class LoginData(BaseModel):
-    name: str
-    last_name: str
-    phone: str
-    id_employees: int                
-    doctor_selected: Optional[str] = None  
-    instructions: Optional[str] = None
-    aseguradora: Optional[str] = None
-    doctor_sender: Optional[str] = None
+class NewPatient(BaseModel):
+    name: PersonName
+    last_name: PersonName
+    phone: Phone
+    doctor_selected: Optional[ShortText] = None
+    instructions: Optional[LongText] = None
+    aseguradora: Optional[ShortText] = None
+    doctor_sender: Optional[ShortText] = None
 
 
 @router.post("/")
-def add_patients(data: LoginData):
+def add_patients(data: NewPatient, user: CurrentUser = Depends(get_current_user)):
     add_patient(
+        user,
         data.name,
         data.last_name,
         data.phone,
-        data.id_employees,
         data.instructions,
         data.doctor_selected,
         data.aseguradora,
-        doctor_sender=data.doctor_sender
+        doctor_sender=data.doctor_sender,
     )
+    return {"ok": True}
